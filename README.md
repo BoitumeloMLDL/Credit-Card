@@ -1,132 +1,84 @@
-# Loan Default Probability Calculator
+# Fraud Detection Application
 
-This project is a web application to calculate the probability of loan default based on user input. The stack consists of:
+This is a **FastAPI-based** fraud detection application with a **minimal Vue frontend**. It runs a **custom ML model** to predict the likelihood of fraud from uploaded transaction CSV files. Results are displayed on the frontend and emailed to an administrator.
 
-- **Frontend:** Vue (via CDN) with Bootstrap for styling, served via a simple web server.
-- **Backend:** FastAPI with SQLite for data storage.
-- **Deployment:** Dockerized application deployed to DigitalOcean using SSH-based deployment scripts.
+## 📌 Features
+- **FastAPI Backend** – Handles file uploads, fraud prediction, and email notifications.
+- **Vue Frontend (CDN)** – Provides a simple UI for uploading CSVs and viewing flagged transactions.
+- **Custom ML Model** – Predicts fraud likelihood for each transaction.
+- **Email Notifications** – Sends an email report of flagged transactions.
+- **Dockerized Deployment** – Runs in containers, deployed using a script onto a **DigitalOcean Droplet**.
+- **MailHog for Testing** – Captures emails locally for debugging.
 
-## Project Structure
+---
 
-```
+## 🚀 Running the Demo
 
-.
-├── backend/ # FastAPI application
-│ ├── main.py # Main FastAPI app
-│ ├── models.py # Database models
-│ ├── requirements.txt # Backend dependencies
-│ └── ... # Other backend files
-├── frontend/ # Vue-based frontend
-│ ├── index.html # Main application HTML
-│ ├── assets/ # Static files
-│ └── ... # Other frontend files
-├── docker-compose.yml # Docker configuration
-├── README.md # Project documentation
-└── .env # Environment variables
-```
+### **1️⃣ Prerequisites**
+Ensure you have:
+- **Docker & Docker Compose**
+- **Python 3.11+ (for local development, if needed)**
+- **A DigitalOcean Droplet (for deployment)**
 
-## Prerequisites
+---
 
-Ensure you have the following installed:
-
-- **Python 3.11+** (for FastAPI backend)
-- **Node.js (npx)** (for frontend development)
-- **Docker & Docker Compose** (for deployment)
-
-## Development Setup
-
-To run the application locally, use the following command:
+### **2️⃣ Run Locally with Docker**
+Clone the repository and start the application:
 
 ```bash
-fastapi dev backend/main.py & npx server frontend/
-```
+docker compose up --build -d
+Access the Application:
+    •    📊 Web UI: http://161.35.87.43:8000
+    •    📩 Email Inbox (MailHog): http://161.35.87.43:8025
 
-### Explanation:
+3️⃣ API Usage
+The backend provides a single POST /upload endpoint for CSV file uploads.
+Example Request
+curl -X POST "http://localhost:8000/upload" \
+     -H "Content-Type: multipart/form-data" \
+     -F "file=@transactions.csv"
+Example JSON Response
+[
+  { "u_id": "12345", "prediction": 1 },
+  { "u_id": "67890", "prediction": 1 },
+  { "u_id": "54321", "prediction": 1 }
+]
+The response is also displayed on the frontend and sent via email.
 
-- `fastapi dev backend/main.py` runs the FastAPI backend with hot-reloading.
-- `npx server frontend/` serves the frontend via a simple HTTP server.
+🛠️ Deployment to DigitalOcean
+The application is deployed using a custom deployment script.
+Steps to Deploy:
+    1    Ensure your DigitalOcean Droplet is running.
+    2    Update the deploy.sh script with: SERVER_USER="your-username"
+    3    SERVER_IP="your-server-ip"
+    4    DEPLOY_PATH="/path/to/app"
+    5    
+    6    Run the deployment: ./deploy.sh
+    7    
+    8    Access your live application:
+    ◦    Web UI: http://your-server-ip:8000
+    ◦    Emails (MailHog): http://your-server-ip:8025
 
-Once running, access the application:
+📂 Project Structure
+.
+├── backend/                # FastAPI application
+│   ├── main.py             # API and logic
+│   ├── ml_model.py         # Fraud prediction logic
+│   ├── email_template.html # Email notification template
+│   ├── requirements.txt    # Dependencies
+│   └── Dockerfile          # Backend container setup
+├── frontend/               # Vue frontend (served via FastAPI)
+│   ├── index.html          # Main UI
+│   ├── static/             # CSS, JS (if needed)
+├── deploy.sh               # Deployment script
+├── compose.yaml            # Docker setup
+└── README.md               # This document
 
-- **Frontend:** `http://localhost:3000`
-- **Backend API:** `http://localhost:8000`
+⚡ Technology Stack
+    •    Backend: FastAPI (Python)
+    •    Frontend: Vue (via CDN)
+    •    ML Model: Hand-rolled fraud detection logic
+    •    Emailing: MailHog (for local testing)
+    •    Deployment: Docker + DigitalOcean Droplet
 
-## API Endpoint
-
-### `POST /default`
-
-**Request Body:**
-
-```json
-{
-  "amount_requested": 50000,
-  "application_date": "2025-01-26",
-  "risk_score": 700,
-  "debt_to_income_ratio": 35.5
-}
-```
-
-**Response:**
-
-```json
-0.92
-```
-
-## Deployment to DigitalOcean
-
-The application is containerized using Docker and deployed to DigitalOcean using SSH-based deployment scripts.
-
-### Deployment Steps:
-
-1. Ensure DigitalOcean Droplet is set up with Docker.
-2. Copy project files to the server using SSH:
-
-   ```bash
-   scp -r . tumi@your-server-ip:/path/to/app
-   ```
-
-3. SSH into the server:
-
-   ```bash
-   ssh tumi@your-server-ip
-   ```
-
-4. Run the application:
-
-   ```bash
-   docker compose up -d
-   ```
-
-5. Access the deployed app via `http://your-server-ip`.
-
-## Docker Usage
-
-To run the application locally using Docker:
-
-1. Build and start the containers:
-
-   ```bash
-   docker compose up -d
-   ```
-
-2. Stop the containers:
-
-   ```bash
-   docker compose down
-   ```
-
-## Environment Variables
-
-Create a `.env` file in the root directory with the following content:
-
-```ini
-FE_DEV_PORT=3000
-DATABASE_URL=sqlite:///data/database.db
-```
-
-## Features
-
-- Responsive frontend with Bootstrap
-- Server-side and client-side validation
-- Simple deployment process using Docker and SSH
-- SQLite as the lightweight database
+🚀 Enjoy Fraud Detection Simplified!
