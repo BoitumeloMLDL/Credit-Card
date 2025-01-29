@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: shard_backend
+    volumes:
+      - ./backend:/app
+    environment:
+      - MAILHOG_HOST=mailhog
+      - MAILHOG_PORT=1025
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    depends_on:
+      - mailhog
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: shard_emails
+    ports:
+      - 8025:8025
+      - 1025:1025
+    restart: unless-stopped
