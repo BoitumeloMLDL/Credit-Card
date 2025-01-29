@@ -49,30 +49,15 @@ The response is also displayed on the frontend and sent via email.
 The application is deployed using a custom deployment script.
 Steps to Deploy:
     1    Ensure your DigitalOcean Droplet is running.
-    2    Update the deploy.sh script with: SERVER_USER="your-username"
-    3    SERVER_IP="your-server-ip"
-    4    DEPLOY_PATH="/path/to/app"
+    2    Update the deploy.sh script with: SERVER_USER="root"
+    3    SERVER_IP="161.35.87.43"
+    4    DEPLOY_PATH="/home/boitumelo/shard_app"
     5    
     6    Run the deployment: ./deploy.sh
     7    
     8    Access your live application:
-    ◦    Web UI: http://your-server-ip:8000
-    ◦    Emails (MailHog): http://your-server-ip:8025
-
-📂 Project Structure
-.
-├── backend/                # FastAPI application
-│   ├── main.py             # API and logic
-│   ├── ml_model.py         # Fraud prediction logic
-│   ├── email_template.html # Email notification template
-│   ├── requirements.txt    # Dependencies
-│   └── Dockerfile          # Backend container setup
-├── frontend/               # Vue frontend (served via FastAPI)
-│   ├── index.html          # Main UI
-│   ├── static/             # CSS, JS (if needed)
-├── deploy.sh               # Deployment script
-├── compose.yaml            # Docker setup
-└── README.md               # This document
+    ◦    Web UI: http://161.35.87.43:8000
+    ◦    Emails (MailHog): http://161.35.87.43:8025
 
 ⚡ Technology Stack
     •    Backend: FastAPI (Python)
